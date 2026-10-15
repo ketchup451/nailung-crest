@@ -6,7 +6,8 @@
 <title>香港奶龍中學</title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#FCF8EC">
-<link rel="icon" href="crest.png">
+<link rel="icon" href="crest-256.png">
+<link rel="preload" as="image" href="crest-eye-672.webp" type="image/webp">
 <style>
   :root{
     --paper:#FCF8EC;
@@ -35,8 +36,7 @@
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background:
       radial-gradient(70% 38% at 50% 0%, rgba(212,175,55,.16), transparent 72%),
-      repeating-linear-gradient(0deg, rgba(120,95,25,.030) 0 1px, transparent 1px 3px);
-    mix-blend-mode:multiply;
+      repeating-linear-gradient(0deg, rgba(120,95,25,.045) 0 1px, transparent 1px 3px);
   }
 
   .wrap{width:100%;max-width:520px;position:relative;z-index:1;text-align:center}
@@ -46,9 +46,12 @@
   .crest-tilt{
     position:relative;display:block;cursor:pointer;
     transform-style:preserve-3d;
-    transition:transform .18s ease-out;
+    will-change:transform;
+    transition:transform .28s cubic-bezier(.22,1,.36,1);   /* 只在放開滑鼠歸位時好看 */
     filter:drop-shadow(0 14px 28px rgba(112,86,16,.20)) drop-shadow(0 2px 5px rgba(112,86,16,.09));
   }
+  .crest-tilt.tracking{transition:none}                    /* 跟隨期間關掉過渡，否則永遠追不上滑鼠 */
+  .crest-tilt picture{display:block}
   .crest-tilt .crest-img{display:block;width:100%;height:auto;
                          -webkit-user-drag:none;user-select:none;transition:filter .2s}
   .crest-img.wiggle{animation:wig .58s ease}
@@ -60,7 +63,7 @@
   .crest-tilt img.eye{position:absolute;left:40.4444%;top:46.5074%;
        width:5.2222%;height:4.3199%;display:block;
        pointer-events:none;will-change:transform}
-  .crest-tilt img.pupil{will-change:transform;transition:transform .07s linear}
+  .crest-tilt img.pupil{will-change:transform}
 
   .bubble{
     position:absolute;left:66%;top:31%;z-index:6;
@@ -143,8 +146,10 @@
          font-size:11px;line-height:1.9;color:var(--ink-3);letter-spacing:.02em}
 
   /* ---------------- D 落下的粒子 ---------------- */
-  #fall{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
-  .p{position:absolute;top:-70px;opacity:0;animation:fall linear forwards}
+  #fall{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5;
+        contain:layout paint}
+  .p{position:absolute;top:-70px;opacity:0;animation:fall linear forwards;
+     will-change:transform,opacity}
   .p img{display:block;width:100%;opacity:.9}
   .p.dot{width:7px;height:7px;transform:rotate(45deg);
          background:linear-gradient(180deg,#EBCB6A,#B8912A);border-radius:2px;opacity:0}
@@ -191,8 +196,11 @@
 
   <div class="crest-outer">
     <div class="crest-tilt" id="crestTilt">
-      <img class="crest-img" id="crest" src="crest-eye.png"
-           alt="香港奶龍中學 · 校徽" draggable="false">
+      <picture>
+        <source srcset="crest-eye-672.webp" type="image/webp">
+        <img class="crest-img" id="crest" src="crest-eye.png" decoding="async"
+             width="900" height="1088" alt="香港奶龍中學 · 校徽" draggable="false">
+      </picture>
       <img class="eye" id="iris" src="eye-iris.png" alt="" aria-hidden="true">
       <img class="eye pupil" id="pupil" src="eye-pupil.png" alt="" aria-hidden="true">
       <span class="bubble" id="bubble">哇</span>
@@ -225,7 +233,7 @@
 
 <div id="stamp" aria-hidden="true">
   <span class="ring"></span>
-  <img src="crest.png" alt="">
+  <img id="stampImg" alt="" data-src="crest-672.webp" decoding="async">
 </div>
 
 <script>
@@ -250,7 +258,20 @@
   var stamp = $('stamp'), fall = $('fall'), track = document.querySelector('.track');
   var smsg = $('smsg'), stime = $('stime'), skipBtn = $('skip'), stayBtn = $('stay');
   var runner = slot.querySelector('img');
+  var stampImg = $('stampImg');
   var preview = hold;      // 預覽模式：只示範、不真的跳轉
+
+  // 蓋章用的圖不在首屏，延後才載入（它本來會跟校徽搶頻寬、拖慢第一次渲染）
+  var stampTimer = null;
+  function armStamp() {
+    if (stampImg && !stampImg.getAttribute('src') && stampImg.dataset.src) {
+      stampImg.src = stampImg.dataset.src;
+    }
+  }
+  function armStampSoon() {
+    clearTimeout(stampTimer);
+    stampTimer = setTimeout(armStamp, 1600);   // 3.45s 才用，留足 1.8s 下載
+  }
 
   $('dest').textContent = TARGET;
 
@@ -340,7 +361,8 @@
     startedAt = Date.now();
     smsg.textContent = '正在前往本校正式網站';
     stime.hidden = false;
-    tStamp = setTimeout(function () { stamp.classList.add('on'); }, STAMP);
+    armStampSoon();
+    tStamp = setTimeout(function () { armStamp(); stamp.classList.add('on'); }, STAMP);
     tGo = setTimeout(go, TOTAL);
     ui = setInterval(paint, 50);
     paint();
@@ -352,18 +374,23 @@
   });
 
   /* ---------------- A 眼睛全頁跟隨滑鼠 + 校徽微轉 ---------------- */
-  var pupilMax = 0;
-  function measure() { pupilMax = pupil.getBoundingClientRect().width * 0.17; }
-  measure();
-  window.addEventListener('resize', measure);
+  var outer = document.querySelector('.crest-outer');
+  var pupilMax = 0, cx = 0, cy = 0, reach = 1;
+  var px = 0, py = 0, raf = 0, tracking = false;
 
-  // 由校徽中心指向指標方向；離得越遠偏移越大，到上限為止
-  function point(x, y) {
-    var r = tilt.getBoundingClientRect();
-    var dx = x - (r.left + r.width / 2);
-    var dy = y - (r.top + r.height / 2);
+  function measure() {
+    // 量沒有被 3D 旋轉污染的「外框」，取中心點
+    var r = outer.getBoundingClientRect();
+    cx = r.left + r.width / 2;
+    cy = r.top + r.height / 2;
+    reach = Math.max(window.innerWidth, window.innerHeight) * 0.42;
+    pupilMax = pupil.getBoundingClientRect().width * 0.17;
+  }
+
+  function apply() {
+    raf = 0;
+    var dx = px - cx, dy = py - cy;
     var len = Math.sqrt(dx * dx + dy * dy) || 1;
-    var reach = Math.max(window.innerWidth, window.innerHeight) * 0.42;
     var f = Math.min(1, len / reach);
     var nx = (dx / len) * f, ny = (dy / len) * f;
 
@@ -374,11 +401,27 @@
                                           (-ny * 3.2).toFixed(2) + 'deg)';
     }
   }
-  function rest() { pupil.style.transform = ''; tilt.style.transform = ''; }
 
-  window.addEventListener('pointermove', function (e) { point(e.clientX, e.clientY); },
+  // 不管滑鼠回報多快，一幀只重算一次；也不再每次讀 getBoundingClientRect
+  function moveTo(x, y) {
+    px = x; py = y;
+    if (!raf) raf = requestAnimationFrame(apply);
+    if (!tracking) { tracking = true; tilt.classList.add('tracking'); }
+  }
+  function rest() {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    if (tracking) { tracking = false; tilt.classList.remove('tracking'); }
+    pupil.style.transform = '';
+    tilt.style.transform = '';
+  }
+
+  measure();
+  window.addEventListener('load', measure);
+  window.addEventListener('resize', measure, { passive: true });
+  window.addEventListener('scroll', measure, { passive: true });
+  window.addEventListener('pointermove', function (e) { moveTo(e.clientX, e.clientY); },
                           { passive: true });
-  window.addEventListener('pointerdown', function (e) { point(e.clientX, e.clientY); },
+  window.addEventListener('pointerdown', function (e) { moveTo(e.clientX, e.clientY); },
                           { passive: true });
   window.addEventListener('blur', rest);
   document.addEventListener('mouseleave', rest);
@@ -433,7 +476,8 @@
     return;
   }
 
-  tStamp = setTimeout(function () { stamp.classList.add('on'); }, STAMP);
+  armStampSoon();
+  tStamp = setTimeout(function () { armStamp(); stamp.classList.add('on'); }, STAMP);
   tGo = setTimeout(go, TOTAL);
   ui = setInterval(paint, 50);
   paint();
