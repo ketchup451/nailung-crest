@@ -107,11 +107,15 @@
   .status{margin-top:16px;font-size:13px;letter-spacing:.05em;color:var(--ink-2)}
   .status b{color:var(--gold-deep);font-variant-numeric:tabular-nums;font-size:15px;font-weight:700}
 
+  .acts{
+    margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;
+    align-items:center;justify-content:center;
+  }
   button{
-    margin-top:18px;font:inherit;font-size:13.5px;font-weight:700;
+    font:inherit;font-size:13.5px;font-weight:700;
     letter-spacing:.10em;text-indent:.10em;color:#FFF8E4;
     background:linear-gradient(180deg,#8E6D15,#7A5F10);
-    border:0;border-radius:999px;padding:13px 32px;cursor:pointer;
+    border:0;border-radius:999px;padding:13px 30px;cursor:pointer;
     box-shadow:0 8px 20px rgba(112,86,16,.26), inset 0 1px 0 rgba(255,255,255,.18);
     transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
   }
@@ -119,6 +123,19 @@
                box-shadow:0 12px 26px rgba(112,86,16,.32), inset 0 1px 0 rgba(255,255,255,.22)}
   button:active{transform:translateY(0)}
   button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+  button.ghost{
+    background:transparent;color:var(--gold-deep);box-shadow:none;
+    padding:11px 24px;font-weight:400;font-size:13px;letter-spacing:.06em;
+    border:1.5px solid rgba(184,145,42,.45);
+  }
+  button.ghost:hover{
+    background:rgba(184,145,42,.10);border-color:var(--gold);
+    transform:translateY(-1px);box-shadow:none;
+  }
+  button.ghost:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+  .status .mute{opacity:.75}
 
   .dest{margin-top:15px;font-size:11.5px;color:var(--ink-3);word-break:break-all}
 
@@ -190,14 +207,17 @@
       <div class="bar"><i id="bar"></i></div>
       <div class="runner-slot" id="slot"><img src="run.png" alt="" aria-hidden="true"></div>
     </div>
-    <p class="status">正在前往本校正式網站 · <b id="sec">4</b> 秒</p>
-    <button id="skip" type="button">唔等喇，而家就去 →</button>
+    <p class="status"><span id="smsg">正在前往本校正式網站</span><span id="stime"> · <b id="sec">4</b> 秒</span></p>
+    <div class="acts">
+      <button id="skip" type="button">唔等喇，而家就去 →</button>
+      <button id="stay" type="button" class="ghost">先唔走，留低睇多陣</button>
+    </div>
     <p class="dest" id="dest"></p>
   </div>
 
   <footer>
-    本站為校友私人玩笑作品，並非任何學校之官方網站，亦與任何學校無關。<br>
-    即將跳轉至官方網站：www.nlsipess.edu.hk
+    本站純屬校友私人玩笑，並非任何學校之官方網站，與任何學校亦無關聯。<br>
+    猜到作者是誰嗎？IG 私訊我 —— 猜中者，有小禮物一份。
   </footer>
 </div>
 
@@ -228,6 +248,9 @@
   var bar = $('bar'), sec = $('sec'), slot = $('slot'), status = document.querySelector('.status');
   var crest = $('crest'), tilt = $('crestTilt'), pupil = $('pupil'), bubble = $('bubble');
   var stamp = $('stamp'), fall = $('fall'), track = document.querySelector('.track');
+  var smsg = $('smsg'), stime = $('stime'), skipBtn = $('skip'), stayBtn = $('stay');
+  var runner = slot.querySelector('img');
+  var preview = hold;      // 預覽模式：只示範、不真的跳轉
 
   $('dest').textContent = TARGET;
 
@@ -250,7 +273,83 @@
     done = true; stop();
     location.replace(TARGET);
   }
-  document.getElementById('skip').addEventListener('click', go);
+
+  /* ---------------- 小工具 ---------------- */
+  var bubbleTimer = null;
+  function say(text, ms) {
+    bubble.textContent = text;
+    bubble.classList.add('on');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(function () { bubble.classList.remove('on'); }, ms || 1300);
+  }
+  function wiggle() {
+    crest.classList.remove('wiggle');
+    void crest.offsetWidth;
+    crest.classList.add('wiggle');
+    crest.addEventListener('animationend', function h() {
+      crest.classList.remove('wiggle'); crest.removeEventListener('animationend', h);
+    });
+  }
+  function runPaused(p) {
+    if (runner) runner.style.animationPlayState = p ? 'paused' : '';
+  }
+  function startDemo() {                    // 預覽模式用的慢速示範
+    if (reduced) { place(1); return; }
+    var t0 = Date.now();
+    ui = setInterval(function () {
+      var p = ((Date.now() - t0) % 5200) / 5200;
+      place(p);
+    }, 50);
+  }
+
+  /* ---------------- 先唔走 / 再倒數一次 ---------------- */
+  var staying = false;
+
+  function cancelGo() {
+    if (done || staying) return;
+    staying = true;
+    stop();
+    stamp.classList.remove('on');
+    runPaused(true);
+    skipBtn.textContent = '好啦，去官網 →';
+    stayBtn.textContent = '再倒數一次';
+    if (preview) {
+      smsg.textContent = '預覽模式：已停用自動跳轉';
+      stime.hidden = true;
+    } else {
+      smsg.textContent = '好，唔走住';
+      stime.hidden = true;
+    }
+    say('終於有人陪', 1900);
+  }
+
+  function restartGo() {
+    if (done || !staying) return;
+    staying = false;
+    stop();
+    stamp.classList.remove('on');
+    runPaused(false);
+    skipBtn.textContent = '唔等喇，而家就去 →';
+    stayBtn.textContent = '先唔走，留低睇多陣';
+    if (preview) {
+      smsg.textContent = '預覽模式：已停用自動跳轉（小奶龍示範跑動中）';
+      stime.hidden = true;
+      startDemo();
+      return;
+    }
+    startedAt = Date.now();
+    smsg.textContent = '正在前往本校正式網站';
+    stime.hidden = false;
+    tStamp = setTimeout(function () { stamp.classList.add('on'); }, STAMP);
+    tGo = setTimeout(go, TOTAL);
+    ui = setInterval(paint, 50);
+    paint();
+  }
+
+  skipBtn.addEventListener('click', go);            // 主按鈕永遠是「去」
+  stayBtn.addEventListener('click', function () {    // 副按鈕切換：停 / 再倒數
+    if (staying) restartGo(); else cancelGo();
+  });
 
   /* ---------------- A 眼睛全頁跟隨滑鼠 + 校徽微轉 ---------------- */
   var pupilMax = 0;
@@ -286,18 +385,9 @@
 
   /* ---------------- B 點一下冒句話 ---------------- */
   var LINES = ['哇', '做咩篤我', '痛啊', '靚仔，等陣先', '母校喺下面'];
-  var bubbleTimer = null;
   tilt.addEventListener('click', function () {
-    crest.classList.remove('wiggle');
-    void crest.offsetWidth;
-    crest.classList.add('wiggle');
-    bubble.textContent = LINES[Math.floor(Math.random() * LINES.length)];
-    bubble.classList.add('on');
-    clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(function () { bubble.classList.remove('on'); }, 1300);
-    crest.addEventListener('animationend', function h() {
-      crest.classList.remove('wiggle'); crest.removeEventListener('animationend', h);
-    });
+    wiggle();
+    say(LINES[Math.floor(Math.random() * LINES.length)], 1300);
   });
 
   /* ---------------- D 開場落下的奶龍同金粒 ---------------- */
@@ -334,17 +424,12 @@
     'background:#B8912A;color:#FCF8EC;padding:2px 6px;border-radius:3px;font-weight:700',
     'color:#8A6A12');
 
-  if (hold) {
+  if (preview) {
     // 預覽模式：不跳轉，改用慢速示範一圈，方便檢視小奶龍跑動
     place(1);
-    status.innerHTML = '預覽模式：已停用自動跳轉（小奶龍示範跑動中）';
-    if (!reduced) {
-      var t0 = Date.now();
-      ui = setInterval(function () {
-        var p = ((Date.now() - t0) % 5200) / 5200;
-        place(p);
-      }, 50);
-    }
+    smsg.textContent = '預覽模式：已停用自動跳轉（小奶龍示範跑動中）';
+    stime.hidden = true;
+    startDemo();
     return;
   }
 
