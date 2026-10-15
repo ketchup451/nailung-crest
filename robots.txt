@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 校友私人玩笑網站，非任何學校的官方網站
+Sitemap: https://xn--fiqx8ydrbqw9ayt3clqh.com/sitemap.xml
