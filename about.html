@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>關於「香港奶龍中學」— 這不是一間學校</title>
-<meta name="description" content="「香港奶龍中學」（簡體：香港奶龙中学）不是一間學校，是校友私下開的玩笑網站。校名、校徽、校訓、校歌全部是編的，與任何學校及辦學團體無關。猜到作者是誰，歡迎 IG 私訊領小禮物。">
+<title>關於「香港奶龍中學」— 功能開發中</title>
+<meta name="description" content="關於「香港奶龍中學」（簡體：香港奶龙中学）這一頁仍在開發中。猜到作者是誰，歡迎 IG 私訊領小禮物。">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <meta name="theme-color" content="#FCF8EC">
 <link rel="canonical" href="https://xn--fiqx8ydrbqw9ayt3clqh.com/about.html">
@@ -14,15 +14,15 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="香港奶龍中學">
 <meta property="og:locale" content="zh_HK">
-<meta property="og:title" content="關於「香港奶龍中學」">
-<meta property="og:description" content="「香港奶龍中學」不是一間學校，是校友私下開的玩笑網站。猜到作者是誰，歡迎 IG 私訊領小禮物。">
+<meta property="og:title" content="關於「香港奶龍中學」— 功能開發中">
+<meta property="og:description" content="這一頁仍在開發中。猜到作者是誰，歡迎 IG 私訊領小禮物。">
 <meta property="og:url" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/about.html">
 <meta property="og:image" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="關於「香港奶龍中學」">
-<meta name="twitter:description" content="這不是一間學校，是校友私下開的玩笑網站。">
+<meta name="twitter:title" content="關於「香港奶龍中學」— 功能開發中">
+<meta name="twitter:description" content="這一頁仍在開發中。猜到作者是誰，歡迎 IG 私訊領小禮物。">
 <meta name="twitter:image" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png">
 
 <script type="application/ld+json">
@@ -75,6 +75,25 @@
           background:linear-gradient(180deg,#D9B23F,var(--gold))}
 
   article{margin-top:38px}
+
+  /* 開發中提示 */
+  .wip{
+    margin-top:6px;padding:34px 24px;border-radius:16px;text-align:center;
+    border:1px dashed rgba(184,145,42,.48);
+    background:linear-gradient(180deg,rgba(255,255,255,.60),rgba(255,255,255,.16));
+  }
+  .wip .dot{
+    display:inline-block;width:8px;height:8px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 0 5px rgba(184,145,42,.16);
+    animation:pulse 1.9s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:.30}50%{opacity:1}}
+  .wip h2{
+    margin:16px 0 0;padding:0;font-size:16px;font-weight:700;
+    letter-spacing:.26em;text-indent:.26em;color:var(--gold-deep);
+  }
+  .wip h2::before{display:none}
+  .wip p{margin-top:12px;font-size:13.5px;line-height:1.9;color:var(--ink-3)}
   h2{
     font-size:15px;font-weight:700;letter-spacing:.14em;color:var(--gold-deep);
     margin:34px 0 12px;padding-left:12px;position:relative;
@@ -136,7 +155,11 @@
   <div class="rule"><i></i></div>
 
   <article>
-    <p>「香港奶龍中學」（簡體寫作「香港奶龙中学」）<b>不是一間學校</b>。校名、校徽、校訓、校歌，全部是校友私下編出來的玩笑，與任何學校、任何辦學團體都沒有關係，也不提供任何課程、學位或招生。</p>
+    <div class="wip">
+      <span class="dot"></span>
+      <h2>功能開發中</h2>
+      <p>這一頁還在寫。之後會放上這間「學校」的來龍去脈。</p>
+    </div>
 
     <h2>猜作者</h2>
     <p>如果你猜到作者是誰，歡迎 IG 私訊我，猜中者有小禮物一份。</p>
