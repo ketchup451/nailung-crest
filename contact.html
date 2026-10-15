@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>聯繫作者</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FCF8EC">
+<link rel="icon" href="crest-256.png">
+<style>
+  :root{--paper:#FCF8EC;--gold:#B8912A;--gold-deep:#8A6A12;
+        --ink:#2E2517;--ink-2:#6B5C3E;--ink-3:#8A7C60}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(120% 62% at 50% -8%, #F6E7BE 0%, #FBF5E4 52%, #FCF8EC 100%) #FCF8EC;
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:56px 22px 64px;
+  }
+  main{max-width:560px;width:100%;text-align:center}
+
+  h1{
+    font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;
+    font-size:clamp(40px,12vw,72px);font-weight:700;
+    letter-spacing:.10em;text-indent:.10em;color:var(--gold-deep);
+    line-height:1.2;
+    animation:pop .5s cubic-bezier(.22,1.4,.5,1) both;
+  }
+  @keyframes pop{
+    0%{opacity:0;transform:scale(1.5) rotate(-3deg)}
+    100%{opacity:1;transform:none}
+  }
+  .counter{
+    margin-top:22px;font-size:15px;letter-spacing:.10em;color:var(--gold);
+  }
+  .counter b{
+    color:var(--gold-deep);font-size:26px;font-weight:700;
+    font-variant-numeric:tabular-nums;padding:0 4px;
+  }
+  .burn{
+    margin-top:26px;font-size:clamp(16px,4.4vw,20px);line-height:1.85;
+    color:var(--ink-2);letter-spacing:.03em;
+  }
+  figure{margin-top:34px}
+  figure img{display:block;width:100%;max-width:380px;margin:0 auto;border-radius:14px}
+  .back{
+    display:inline-block;margin-top:36px;text-decoration:none;
+    font-size:13px;letter-spacing:.10em;color:var(--ink-3);
+    border-bottom:1px solid rgba(184,145,42,.35);padding-bottom:2px;
+  }
+  .back:hover{color:var(--gold-deep);border-color:var(--gold)}
+  @media (prefers-reduced-motion:reduce){h1{animation:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>你被騙了</h1>
+
+  <p class="counter" id="counterLine" hidden>你是第 <b id="visitNo">—</b> 個被騙的</p>
+
+  <p class="burn">你不會以為我傻到把聯絡資訊放在這裡吧</p>
+
+  <figure><img id="laugh" src="laugh.gif" alt=""></figure>
+
+  <a class="back" href="./">返去</a>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  // 奶龍大笑 GIF 未放上之前，整塊隱藏，免得見到爛圖示
+  var laugh = document.getElementById('laugh');
+  laugh.addEventListener('error', function () { laugh.parentNode.hidden = true; });
+  if (laugh.complete && laugh.naturalWidth === 0) laugh.parentNode.hidden = true;
+
+  // 「你是第 N 個」需要一個可以寫入的後端。
+  // 把後端位址填進 COUNTER_ENDPOINT，這一整行才會出現；
+  // 未接之前不會顯示，也不會露出爛樣。
+  var COUNTER_ENDPOINT = '';
+  var line = document.getElementById('counterLine');
+  var slot = document.getElementById('visitNo');
+
+  if (!COUNTER_ENDPOINT) return;
+
+  fetch(COUNTER_ENDPOINT, { method: 'POST' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && typeof d.n === 'number') {
+        slot.textContent = d.n.toLocaleString('zh-Hant');
+        line.hidden = false;
+      }
+    })
+    .catch(function () { /* 拿不到數字就不顯示，不讓頁面看起來壞掉 */ });
+})();
+</script>
+</body>
+</html>

@@ -94,6 +94,23 @@
   }
   .wip h2::before{display:none}
   .wip p{margin-top:12px;font-size:13.5px;line-height:1.9;color:var(--ink-3)}
+
+  /* 入口 */
+  .entry{margin-top:26px}
+  .entry a{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    text-decoration:none;padding:16px 22px;border-radius:13px;
+    border:1px solid rgba(184,145,42,.36);
+    background:linear-gradient(180deg,rgba(255,255,255,.60),rgba(255,255,255,.18));
+    font-size:14.5px;font-weight:700;letter-spacing:.12em;color:var(--gold-deep);
+    transition:transform .16s ease, border-color .16s ease, background .16s ease;
+  }
+  .entry a::after{content:"→";font-weight:400;opacity:.65}
+  .entry a:hover{
+    transform:translateY(-2px);border-color:var(--gold);
+    background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.32));
+  }
+  .entry a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   h2{
     font-size:15px;font-weight:700;letter-spacing:.14em;color:var(--gold-deep);
     margin:34px 0 12px;padding-left:12px;position:relative;
@@ -162,6 +179,8 @@
 
     <h2>猜作者</h2>
     <p>如果你猜到作者是誰，歡迎 IG 私訊我，猜中者有小禮物一份。</p>
+
+    <div class="entry"><a href="contact.html">聯繫作者</a></div>
 
     <div class="cta">
       <a class="btn" href="./">去主頁 →</a>
