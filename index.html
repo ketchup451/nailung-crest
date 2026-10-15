@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>香港奶龍中學</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FCF8EC">
+<link rel="icon" href="crest.png">
+<style>
+  :root{
+    --paper:#FCF8EC;
+    --gold:#B8912A;
+    --gold-deep:#8A6A12;
+    --gold-line:rgba(184,145,42,.34);
+    --ink:#2E2517;
+    --ink-2:#6B5C3E;
+    --ink-3:#8A7C60;
+    --crest-w:clamp(232px, 58vw, 336px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+
+  body{
+    background:radial-gradient(120% 62% at 50% -8%, #F6E7BE 0%, #FBF5E4 52%, #FCF8EC 100%) #FCF8EC;
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    padding:40px 22px 46px;
+    min-height:100%;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(70% 38% at 50% 0%, rgba(212,175,55,.16), transparent 72%),
+      repeating-linear-gradient(0deg, rgba(120,95,25,.030) 0 1px, transparent 1px 3px);
+    mix-blend-mode:multiply;
+  }
+
+  .wrap{width:100%;max-width:520px;position:relative;z-index:1;text-align:center}
+
+  /* ---------------- 校徽 ---------------- */
+  .crest-outer{width:var(--crest-w);margin:0 auto;perspective:760px}
+  .crest-tilt{
+    position:relative;display:block;cursor:pointer;
+    transform-style:preserve-3d;
+    transition:transform .18s ease-out;
+    filter:drop-shadow(0 14px 28px rgba(112,86,16,.20)) drop-shadow(0 2px 5px rgba(112,86,16,.09));
+  }
+  .crest-tilt .crest-img{display:block;width:100%;height:auto;
+                         -webkit-user-drag:none;user-select:none;transition:filter .2s}
+  .crest-img.wiggle{animation:wig .58s ease}
+  @keyframes wig{
+    0%,100%{transform:rotate(0)}18%{transform:rotate(-4.5deg)}
+    40%{transform:rotate(4deg)}62%{transform:rotate(-2.5deg)}82%{transform:rotate(1.2deg)}
+  }
+
+  .crest-tilt img.eye{position:absolute;left:40.4444%;top:46.5074%;
+       width:5.2222%;height:4.3199%;display:block;
+       pointer-events:none;will-change:transform}
+  .crest-tilt img.pupil{will-change:transform;transition:transform .07s linear}
+
+  .bubble{
+    position:absolute;left:66%;top:31%;z-index:6;
+    transform:translate(-50%,-100%) scale(.4);transform-origin:50% 100%;
+    background:#fff;color:#7A5F10;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+    padding:6px 12px;border-radius:13px;border:1.5px solid rgba(184,145,42,.5);
+    box-shadow:0 7px 18px rgba(112,86,16,.20);white-space:nowrap;
+    opacity:0;pointer-events:none;
+    transition:opacity .16s ease, transform .26s cubic-bezier(.34,1.56,.64,1);
+  }
+  .bubble.on{opacity:1;transform:translate(-50%,-100%) scale(1)}
+  .bubble::after{
+    content:"";position:absolute;left:12px;bottom:-6.5px;width:10px;height:10px;background:#fff;
+    border-right:1.5px solid rgba(184,145,42,.5);border-bottom:1.5px solid rgba(184,145,42,.5);
+    transform:rotate(45deg);border-bottom-right-radius:2px;
+  }
+
+  /* ---------------- 校名 ---------------- */
+  h1{
+    margin-top:22px;
+    font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;
+    font-size:clamp(26px,7vw,38px);font-weight:700;
+    letter-spacing:.20em;text-indent:.20em;
+    color:var(--gold-deep);
+  }
+  .rule{display:flex;align-items:center;justify-content:center;gap:10px;
+        margin:24px auto 0;width:100%;max-width:360px}
+  .rule::before,.rule::after{content:"";flex:1;height:1px;
+        background:linear-gradient(90deg,transparent,var(--gold-line))}
+  .rule::after{background:linear-gradient(90deg,var(--gold-line),transparent)}
+  .rule i{width:6px;height:6px;flex:0 0 6px;transform:rotate(45deg);
+          background:linear-gradient(180deg,#D9B23F,var(--gold))}
+
+  /* ---------------- 跳轉 ---------------- */
+  .track{position:relative;margin-top:28px;padding-top:46px}
+  .bar{height:4px;border-radius:99px;overflow:hidden;background:rgba(184,145,42,.16);
+       box-shadow:inset 0 1px 2px rgba(112,86,16,.10)}
+  .bar>i{display:block;height:100%;width:0;border-radius:99px;
+         background:linear-gradient(90deg,#D9B23F,var(--gold))}
+  .runner-slot{position:absolute;bottom:2px;left:20px;width:40px;margin-left:-20px}
+  .runner-slot img{display:block;width:40px;height:40px;animation:hop .38s ease-in-out infinite}
+  @keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-3.5px)}}
+
+  .status{margin-top:16px;font-size:13px;letter-spacing:.05em;color:var(--ink-2)}
+  .status b{color:var(--gold-deep);font-variant-numeric:tabular-nums;font-size:15px;font-weight:700}
+
+  button{
+    margin-top:18px;font:inherit;font-size:13.5px;font-weight:700;
+    letter-spacing:.10em;text-indent:.10em;color:#FFF8E4;
+    background:linear-gradient(180deg,#8E6D15,#7A5F10);
+    border:0;border-radius:999px;padding:13px 32px;cursor:pointer;
+    box-shadow:0 8px 20px rgba(112,86,16,.26), inset 0 1px 0 rgba(255,255,255,.18);
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  }
+  button:hover{transform:translateY(-2px);background:linear-gradient(180deg,#9C7917,#7F6311);
+               box-shadow:0 12px 26px rgba(112,86,16,.32), inset 0 1px 0 rgba(255,255,255,.22)}
+  button:active{transform:translateY(0)}
+  button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+  .dest{margin-top:15px;font-size:11.5px;color:var(--ink-3);word-break:break-all}
+
+  footer{margin-top:36px;padding-top:17px;border-top:1px solid rgba(184,145,42,.20);
+         font-size:11px;line-height:1.9;color:var(--ink-3);letter-spacing:.02em}
+
+  /* ---------------- D 落下的粒子 ---------------- */
+  #fall{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+  .p{position:absolute;top:-70px;opacity:0;animation:fall linear forwards}
+  .p img{display:block;width:100%;opacity:.9}
+  .p.dot{width:7px;height:7px;transform:rotate(45deg);
+         background:linear-gradient(180deg,#EBCB6A,#B8912A);border-radius:2px;opacity:0}
+  @keyframes fall{
+    0%{opacity:0;transform:translateY(0) rotate(0)}
+    14%{opacity:.85}
+    80%{opacity:.85}
+    100%{opacity:0;transform:translateY(112vh) rotate(220deg)}
+  }
+
+  /* ---------------- F 蓋章 ---------------- */
+  #stamp{position:fixed;inset:0;z-index:60;display:grid;place-items:center;
+         pointer-events:none;background:rgba(252,248,236,0);
+         transition:background .18s ease}
+  #stamp.on{background:rgba(252,248,236,.80)}
+  #stamp img{width:min(300px,60vw);opacity:0;
+             filter:drop-shadow(0 20px 36px rgba(112,86,16,.34))}
+  #stamp.on img{animation:slam .55s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes slam{
+    0%{opacity:0;transform:scale(2.5) rotate(-7deg)}
+    52%{opacity:1;transform:scale(.92) rotate(1.4deg)}
+    74%{transform:scale(1.035) rotate(-.7deg)}
+    100%{opacity:1;transform:scale(1) rotate(0)}
+  }
+  #stamp .ring{position:absolute;width:30px;height:30px;border-radius:50%;
+               border:3px solid rgba(184,145,42,.7);opacity:0}
+  #stamp.on .ring{animation:wave .55s ease-out forwards}
+  @keyframes wave{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(11)}}
+
+  @media (prefers-reduced-motion:reduce){
+    .crest-tilt{transition:none}
+    .crest-img.wiggle{animation:none}
+    .runner-slot img{animation:none}
+    .p{display:none}
+    #stamp.on img{animation:none;opacity:1;transform:none}
+    #stamp.on .ring{animation:none}
+    button{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="crest-outer">
+    <div class="crest-tilt" id="crestTilt">
+      <img class="crest-img" id="crest" src="crest-eye.png"
+           alt="香港奶龍中學 · 校徽" draggable="false">
+      <img class="eye" id="iris" src="eye-iris.png" alt="" aria-hidden="true">
+      <img class="eye pupil" id="pupil" src="eye-pupil.png" alt="" aria-hidden="true">
+      <span class="bubble" id="bubble">哇</span>
+    </div>
+  </div>
+
+  <h1>香港奶龍中學</h1>
+  <div class="rule"><i></i></div>
+
+  <div class="go">
+    <div class="track">
+      <div class="bar"><i id="bar"></i></div>
+      <div class="runner-slot" id="slot"><img src="run.png" alt="" aria-hidden="true"></div>
+    </div>
+    <p class="status">正在前往本校正式網站 · <b id="sec">4</b> 秒</p>
+    <button id="skip" type="button">唔等喇，而家就去 →</button>
+    <p class="dest" id="dest"></p>
+  </div>
+
+  <footer>
+    本站為校友私人玩笑作品，並非任何學校之官方網站，亦與任何學校無關。<br>
+    即將跳轉至官方網站：www.nlsipess.edu.hk
+  </footer>
+</div>
+
+<div id="fall" aria-hidden="true"></div>
+
+<div id="stamp" aria-hidden="true">
+  <span class="ring"></span>
+  <img src="crest.png" alt="">
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var TARGET = 'https://www.nlsipess.edu.hk/';
+  var TOTAL  = 4000;      // 自動跳轉
+  var STAMP  = 3450;      // 蓋章時機
+
+  var reduced = window.matchMedia &&
+                window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var inFrame = false;
+  try { inFrame = window.self !== window.top; } catch (e) { inFrame = true; }
+  var hold = reduced || inFrame ||
+             location.protocol === 'file:' ||
+             /(^|[#&?])stay\b/.test(location.hash + location.search);
+
+  var $ = function (id) { return document.getElementById(id); };
+  var bar = $('bar'), sec = $('sec'), slot = $('slot'), status = document.querySelector('.status');
+  var crest = $('crest'), tilt = $('crestTilt'), pupil = $('pupil'), bubble = $('bubble');
+  var stamp = $('stamp'), fall = $('fall'), track = document.querySelector('.track');
+
+  $('dest').textContent = TARGET;
+
+  /* ---------------- 進度條 + 小奶龍 ---------------- */
+  var startedAt = Date.now(), done = false, tStamp = null, tGo = null, ui = null;
+
+  function place(p) {                       // p: 0..1
+    p = Math.max(0, Math.min(1, p));
+    bar.style.width = (p * 100).toFixed(2) + '%';
+    var tw = track.clientWidth, R = 20;     // 讓小奶龍一直留在軌道內
+    slot.style.left = Math.round(R + p * (tw - 2 * R)) + 'px';
+  }
+  function stop() {
+    if (tStamp) { clearTimeout(tStamp); tStamp = null; }
+    if (tGo) { clearTimeout(tGo); tGo = null; }
+    if (ui) { clearInterval(ui); ui = null; }
+  }
+  function go() {
+    if (done) return;
+    done = true; stop();
+    location.replace(TARGET);
+  }
+  document.getElementById('skip').addEventListener('click', go);
+
+  /* ---------------- A 眼睛全頁跟隨滑鼠 + 校徽微轉 ---------------- */
+  var pupilMax = 0;
+  function measure() { pupilMax = pupil.getBoundingClientRect().width * 0.17; }
+  measure();
+  window.addEventListener('resize', measure);
+
+  // 由校徽中心指向指標方向；離得越遠偏移越大，到上限為止
+  function point(x, y) {
+    var r = tilt.getBoundingClientRect();
+    var dx = x - (r.left + r.width / 2);
+    var dy = y - (r.top + r.height / 2);
+    var len = Math.sqrt(dx * dx + dy * dy) || 1;
+    var reach = Math.max(window.innerWidth, window.innerHeight) * 0.42;
+    var f = Math.min(1, len / reach);
+    var nx = (dx / len) * f, ny = (dy / len) * f;
+
+    pupil.style.transform = 'translate(' + (nx * pupilMax).toFixed(2) + 'px,' +
+                                            (ny * pupilMax).toFixed(2) + 'px)';
+    if (!reduced) {
+      tilt.style.transform = 'rotateY(' + (nx * 3.2).toFixed(2) + 'deg) rotateX(' +
+                                          (-ny * 3.2).toFixed(2) + 'deg)';
+    }
+  }
+  function rest() { pupil.style.transform = ''; tilt.style.transform = ''; }
+
+  window.addEventListener('pointermove', function (e) { point(e.clientX, e.clientY); },
+                          { passive: true });
+  window.addEventListener('pointerdown', function (e) { point(e.clientX, e.clientY); },
+                          { passive: true });
+  window.addEventListener('blur', rest);
+  document.addEventListener('mouseleave', rest);
+
+  /* ---------------- B 點一下冒句話 ---------------- */
+  var LINES = ['哇', '做咩篤我', '痛啊', '靚仔，等陣先', '母校喺下面'];
+  var bubbleTimer = null;
+  tilt.addEventListener('click', function () {
+    crest.classList.remove('wiggle');
+    void crest.offsetWidth;
+    crest.classList.add('wiggle');
+    bubble.textContent = LINES[Math.floor(Math.random() * LINES.length)];
+    bubble.classList.add('on');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(function () { bubble.classList.remove('on'); }, 1300);
+    crest.addEventListener('animationend', function h() {
+      crest.classList.remove('wiggle'); crest.removeEventListener('animationend', h);
+    });
+  });
+
+  /* ---------------- D 開場落下的奶龍同金粒 ---------------- */
+  if (!reduced) {
+    var n = window.innerWidth < 520 ? 9 : 14;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('div');
+      var dragon = i % 3 !== 2;
+      d.className = 'p' + (dragon ? '' : ' dot');
+      if (dragon) {
+        var s = Math.round(13 + Math.random() * 8);
+        d.style.width = s + 'px';
+        d.style.height = s + 'px';
+        d.innerHTML = '<img src="run.png" alt="">';
+      }
+      d.style.left = (Math.random() * 94 + 3).toFixed(1) + '%';
+      d.style.animationDuration = (2.4 + Math.random() * 2.0).toFixed(2) + 's';
+      d.style.animationDelay = (Math.random() * 1.1).toFixed(2) + 's';
+      frag.appendChild(d);
+    }
+    fall.appendChild(frag);
+    setTimeout(function () { fall.innerHTML = ''; }, 6000);
+  }
+
+  /* ---------------- 主流程 ---------------- */
+  function paint() {
+    var left = Math.max(0, TOTAL - (Date.now() - startedAt));
+    place(1 - left / TOTAL);
+    sec.textContent = Math.ceil(left / 1000);
+  }
+
+  console.log('%c🐲 香港奶龍中學 %c 彩蛋',
+    'background:#B8912A;color:#FCF8EC;padding:2px 6px;border-radius:3px;font-weight:700',
+    'color:#8A6A12');
+
+  if (hold) {
+    // 預覽模式：不跳轉，改用慢速示範一圈，方便檢視小奶龍跑動
+    place(1);
+    status.innerHTML = '預覽模式：已停用自動跳轉（小奶龍示範跑動中）';
+    if (!reduced) {
+      var t0 = Date.now();
+      ui = setInterval(function () {
+        var p = ((Date.now() - t0) % 5200) / 5200;
+        place(p);
+      }, 50);
+    }
+    return;
+  }
+
+  tStamp = setTimeout(function () { stamp.classList.add('on'); }, STAMP);
+  tGo = setTimeout(go, TOTAL);
+  ui = setInterval(paint, 50);
+  paint();
+})();
+</script>
+</body>
+</html>
