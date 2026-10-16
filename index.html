@@ -302,7 +302,7 @@
         <span class="bbubble" id="bbubble">別走了</span>
       </div>
     </div>
-    <p class="status"><span id="smsg">正在前往本校正式網站</span><span id="stime"> · <b id="sec">4</b> 秒</span></p>
+    <p class="status"><span id="smsg">正在挖掘前往平中的路徑...</span><span id="stime"> · <b id="sec">4</b> 秒</span></p>
     <div class="acts">
       <button id="skip" type="button">唔等喇，而家就去 →</button>
     </div>
@@ -455,8 +455,7 @@
       smsg.textContent = '預覽模式：已停用自動跳轉';
       stime.hidden = true;
     } else {
-      smsg.textContent = '好，唔走住';
-      stime.hidden = true;
+      stime.hidden = true;          // 保持「正在挖掘…」那句不變，只收掉秒數
     }
     say('終於有人陪', 1900);
   }
@@ -476,7 +475,7 @@
       return;
     }
     startedAt = Date.now();
-    smsg.textContent = '正在前往本校正式網站';
+    smsg.textContent = '正在挖掘前往平中的路徑...';
     stime.hidden = false;
     armStampSoon();
     tStamp = setTimeout(function () { armStamp(); stamp.classList.add('on'); }, STAMP);
