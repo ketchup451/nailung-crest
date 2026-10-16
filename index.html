@@ -174,6 +174,42 @@
     transform:rotate(45deg);border-bottom-right-radius:2px;
   }
 
+  /* ---- 閒置亂跑：脫離跑道、改成固定定位，可以在整頁走動 ---- */
+  .runner-slot.roaming{
+    position:fixed;bottom:auto;margin:0;z-index:30;
+    transition:left .55s cubic-bezier(.32,0,.42,1), top .55s cubic-bezier(.32,0,.42,1);
+  }
+  .runner-slot.roaming img{animation-duration:.26s}
+
+  /* 撿到東西時的開心跳 */
+  .runner-slot.cheer img{animation:cheer .3s ease-in-out 3}
+  @keyframes cheer{
+    0%,100%{transform:translateY(0) rotate(0)}
+    25%   {transform:translateY(-9px) rotate(-13deg)}
+    75%   {transform:translateY(-9px) rotate(13deg)}
+  }
+
+  /* ---- 天上掉下來的校徽 ---- */
+  .fallitem{
+    position:fixed;z-index:29;width:26px;height:26px;
+    opacity:0;pointer-events:none;
+    transition:top .92s cubic-bezier(.45,0,.86,.34),
+               left .30s ease, transform .92s linear, opacity .18s ease;
+  }
+  .fallitem.drop{opacity:1;transform:rotate(235deg)}
+  .fallitem.held{
+    opacity:1;transform:rotate(0);
+    transition:top .26s ease, left .26s ease, transform .26s ease, opacity .18s ease;
+  }
+
+  /* ---- 被踢走之後自己飛返嚟 ---- */
+  .runner-slot.reback{animation:knockback .68s cubic-bezier(.28,1.18,.5,1) forwards}
+  @keyframes knockback{
+    0%  {transform:translate(300px,-120px) rotate(400deg);opacity:0}
+    55% {opacity:1}
+    100%{transform:translate(0,0) rotate(0);opacity:1}
+  }
+
   /* ---- 被踢飛的跑者 ---- */
   .runner-slot.kicked img{animation:none}
   .runner-slot.kicked{animation:knockoff .92s cubic-bezier(.22,-.25,.6,1) forwards;z-index:8}
@@ -428,6 +464,14 @@
     if (runner) runner.style.animationPlayState = '';
     if (tStamp) { clearTimeout(tStamp); tStamp = null; }
     if (ui) { clearInterval(ui); ui = null; }
+
+    // 被踢走之後若冇人撳掣，佢會裝住冇事自己飛返嚟（順便做返「亂跑」嘅主角）
+    setTimeout(function () {
+      if (done || !slot || !slot.classList.contains('kicked')) return;
+      slot.classList.remove('kicked');
+      slot.classList.add('reback');
+      setTimeout(function () { slot.classList.remove('reback'); }, 720);
+    }, 1150);
   }
 
   function go() {
@@ -482,6 +526,8 @@
       digDone();
     }
     say('終於有人陪', 1900);
+    idleWatch();
+    scheduleItem();
   }
 
   function restartGo() {
@@ -607,6 +653,146 @@
     // 按鈕同步「被挖開」：實心範圍 = 倒數進度
     if (skipBtn) skipBtn.style.setProperty('--fill', Math.round(p * 100) + '%');
   }
+
+  /* ═══════════ 娛樂系統：閒置亂跑 + 掉東西（不影響主流程）═══════════
+     只在「倒數已結束」之後才會啟動，所以不會跟挖掘／攔路那套打架。*/
+  var IDLE_MS = 10000, WANDER_MS = 2600;
+  var ITEM_MIN = 22000, ITEM_MAX = 42000;
+  var tIdle = null, tWander = null, tItem = null;
+  var offTrack = false, itemBusy = false, itemEl = null;
+
+  function canPlay() {
+    return !preview && !done && staying && !offTrack && !itemBusy && slot && runner;
+  }
+
+  // 掉東西的條件刻意比 goRoam 寬鬆：龍就算正在亂跑，東西一樣可以掉，
+  // 因為 runTo() 會直接把它叫過去。否則「先亂跑、後掉東西」的順序會讓這功能永遠不觸發。
+  function canDrop() {
+    return !preview && !done && staying && !itemBusy && slot && runner;
+  }
+
+  function parkBack() {                       // 回到跑道站好
+    if (!offTrack) return;
+    offTrack = false;
+    if (tWander) { clearTimeout(tWander); tWander = null; }
+    slot.classList.remove('roaming');
+    slot.style.left = '';
+    slot.style.top = '';
+  }
+
+  function detach() {                         // 從跑道脫離（接管定位）
+    if (offTrack) return;
+    var r = slot.getBoundingClientRect();
+    slot.classList.add('roaming');
+    slot.style.left = Math.round(r.left) + 'px';
+    slot.style.top = Math.round(r.top) + 'px';
+    offTrack = true;
+    void slot.offsetWidth;                    // 讓 transition 從這裡起算
+  }
+
+  function wander() {
+    if (!offTrack) return;
+    var x = 16 + Math.random() * Math.max(40, window.innerWidth - 76);
+    var y = 74 + Math.random() * Math.max(40, window.innerHeight * 0.50);
+    slot.style.left = Math.round(x) + 'px';
+    slot.style.top = Math.round(y) + 'px';
+  }
+
+  function goRoam() {
+    if (!canPlay()) return;
+    detach();
+    setTimeout(wander, 30);
+    tWander = setTimeout(function loop() {
+      if (!offTrack) return;
+      if (!itemBusy) wander();
+      tWander = setTimeout(loop, WANDER_MS);
+    }, WANDER_MS);
+  }
+
+  function runTo(x, y) {                      // 跑去某個座標
+    if (!offTrack) detach();
+    slot.style.left = Math.round(x) + 'px';
+    slot.style.top = Math.round(y) + 'px';
+  }
+
+  function backToTrack() {                    // 跑回跑道位置，再交還佈局
+    if (!offTrack) return;
+    if (tWander) { clearTimeout(tWander); tWander = null; }
+    var tr = track.getBoundingClientRect();
+    slot.style.left = Math.round(tr.left) + 'px';
+    slot.style.top = Math.round(tr.bottom - 42) + 'px';
+    setTimeout(parkBack, 560);
+  }
+
+  function idleWatch() {
+    if (tIdle) clearTimeout(tIdle);
+    tIdle = setTimeout(goRoam, IDLE_MS);
+  }
+
+  function userActive() {                     // 有人動 → 牠裝沒事跑回去
+    if (offTrack && !itemBusy) backToTrack();
+    idleWatch();
+  }
+
+  function scheduleItem() {
+    if (tItem) clearTimeout(tItem);
+    tItem = setTimeout(dropItem, ITEM_MIN + Math.random() * (ITEM_MAX - ITEM_MIN));
+  }
+
+  function dropItem() {
+    if (!canDrop()) { tItem = setTimeout(scheduleItem, 6000); return; }
+    itemBusy = true;
+
+    if (itemEl && itemEl.parentNode) itemEl.parentNode.removeChild(itemEl);
+    var x = 30 + Math.random() * Math.max(40, window.innerWidth - 92);
+    var y = Math.round(window.innerHeight * 0.30 + Math.random() * window.innerHeight * 0.26);
+
+    itemEl = document.createElement('img');
+    itemEl.className = 'fallitem';
+    itemEl.src = 'crest-256.png';
+    itemEl.alt = '';
+    itemEl.setAttribute('aria-hidden', 'true');
+    itemEl.style.left = Math.round(x) + 'px';
+    itemEl.style.top = '54px';
+    document.body.appendChild(itemEl);
+
+    requestAnimationFrame(function () {
+      if (!itemEl) return;
+      itemEl.style.top = y + 'px';
+      itemEl.classList.add('drop');
+    });
+
+    setTimeout(function () {                  // 落地 → 龍衝過去
+      if (!itemEl) return;
+      runTo(x - 5, y + 3);
+      setTimeout(pickUp, 640);
+    }, 950);
+  }
+
+  function pickUp() {
+    if (!itemEl) return;
+    var r = slot.getBoundingClientRect();
+    itemEl.classList.remove('drop');
+    itemEl.classList.add('held');
+    itemEl.style.left = Math.round(r.left + 9) + 'px';
+    itemEl.style.top = Math.round(r.top - 16) + 'px';
+    slot.classList.add('cheer');
+    setTimeout(function () { slot.classList.remove('cheer'); }, 950);
+
+    setTimeout(function () {                  // 戴一會就走
+      if (itemEl && itemEl.parentNode) itemEl.parentNode.removeChild(itemEl);
+      itemEl = null;
+      backToTrack();
+      setTimeout(function () { itemBusy = false; scheduleItem(); }, 720);
+    }, 2300);
+  }
+
+  ['pointermove', 'pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, userActive, { passive: true });
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { parkBack(); }
+  });
 
   console.log('%c🐲 香港奶龍中學 %c 彩蛋',
     'background:#B8912A;color:#FCF8EC;padding:2px 6px;border-radius:3px;font-weight:700',
