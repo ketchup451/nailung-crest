@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>關於「香港奶龍中學」— 這不是一間學校</title>
-<meta name="description" content="關於「香港奶龍中學」（簡體：香港奶龙中学）。猜到作者是誰，歡迎 IG 私訊領小禮物。">
+<title>關於香港奶龍中學</title>
+<meta name="description" content="關於香港奶龍中學">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <meta name="theme-color" content="#FCF8EC">
 <link rel="canonical" href="https://xn--fiqx8ydrbqw9ayt3clqh.com/about">
@@ -18,15 +18,15 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="香港奶龍中學">
 <meta property="og:locale" content="zh_HK">
-<meta property="og:title" content="關於「香港奶龍中學」— 這不是一間學校">
-<meta property="og:description" content="猜到作者是誰，歡迎 IG 私訊領小禮物。">
+<meta property="og:title" content="關於香港奶龍中學">
+<meta property="og:description" content="關於香港奶龍中學">
 <meta property="og:url" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/about">
 <meta property="og:image" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="關於「香港奶龍中學」— 這不是一間學校">
-<meta name="twitter:description" content="猜到作者是誰，歡迎 IG 私訊領小禮物。">
+<meta name="twitter:title" content="關於香港奶龍中學">
+<meta name="twitter:description" content="關於香港奶龍中學">
 <meta name="twitter:image" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png">
 
 <script type="application/ld+json">
@@ -135,8 +135,24 @@
   li::before{content:"";position:absolute;left:4px;top:.78em;width:5px;height:5px;
              border-radius:50%;background:var(--gold);opacity:.8}
 
+  /* 明顯的返回主頁按鈕，放在標題正下方 */
+  .backhome{
+    display:block;width:100%;max-width:360px;margin:26px auto 0;
+    text-align:center;text-decoration:none;
+    font-size:16.5px;font-weight:800;letter-spacing:.20em;text-indent:.20em;
+    color:#FFF8E4;border-radius:15px;padding:18px 24px;
+    background:linear-gradient(180deg,#8E6D15,#7A5F10);
+    box-shadow:0 12px 28px rgba(112,86,16,.30), inset 0 1px 0 rgba(255,255,255,.20);
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  }
+  .backhome:hover{transform:translateY(-2px);
+    background:linear-gradient(180deg,#9C7917,#7F6311);
+    box-shadow:0 16px 34px rgba(112,86,16,.36), inset 0 1px 0 rgba(255,255,255,.24)}
+  .backhome:active{transform:translateY(0)}
+  .backhome:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
   .cta{
-    margin-top:40px;padding:26px 24px;border-radius:16px;
+    margin-top:34px;padding:24px;border-radius:16px;
     border:1px solid rgba(184,145,42,.34);
     background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.18));
     text-align:center;
@@ -175,6 +191,8 @@
   <div class="sub">這不是一間學校</div>
   <div class="rule"><i></i></div>
 
+  <a class="backhome" href="./">回到奶校</a>
+
   <article>
     <h2>猜作者</h2>
     <p>如果你猜到作者是誰，歡迎 IG 私訊我，猜中者有小禮物一份。</p>
@@ -182,8 +200,6 @@
     <div class="entry"><a href="/contact">聯繫作者</a></div>
 
     <div class="cta">
-      <a class="btn" href="./">去主頁 →</a>
-      <br>
       <a class="btn ghost" href="https://www.nlsipess.edu.hk/" rel="noopener">直接去學校官網</a>
     </div>
   </article>
