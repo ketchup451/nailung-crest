@@ -406,7 +406,9 @@
     stime.hidden = false;
     armStampSoon();
     tStamp = setTimeout(function () { armStamp(); stamp.classList.add('on'); }, STAMP);
-    tGo = setTimeout(go, TOTAL);
+    // 倒數走完不再自動跳走 —— 改為「停住」，由訪客自己決定去唔去。
+    // 這是主頁能被搜尋引擎收錄的前提：頁面不可以自己導航走。
+    tGo = setTimeout(cancelGo, TOTAL);
     ui = setInterval(paint, 50);
     paint();
   }
@@ -521,7 +523,7 @@
 
   armStampSoon();
   tStamp = setTimeout(function () { armStamp(); stamp.classList.add('on'); }, STAMP);
-  tGo = setTimeout(go, TOTAL);
+  tGo = setTimeout(cancelGo, TOTAL);
   ui = setInterval(paint, 50);
   paint();
 })();
