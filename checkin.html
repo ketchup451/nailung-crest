@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>學生簽到 · 香港奶龍中學</title>
+<meta name="description" content="香港奶龍中學學生簽到——每日簽到累積連續天數，同全校同學一齊爭排行榜。">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#FCF8EC">
+<link rel="canonical" href="https://xn--fiqx8ydrbqw9ayt3clqh.com/checkin.html">
+<link rel="icon" href="crest-256.png">
+<link rel="apple-touch-icon" href="crest-256.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="香港奶龍中學">
+<meta property="og:locale" content="zh_HK">
+<meta property="og:title" content="學生簽到 · 香港奶龍中學">
+<meta property="og:description" content="每日簽到累積連續天數，同全校同學一齊爭排行榜。">
+<meta property="og:url" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/checkin.html">
+<meta property="og:image" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="學生簽到 · 香港奶龍中學">
+<meta name="twitter:description" content="每日簽到累積連續天數，同全校同學一齊爭排行榜。">
+<meta name="twitter:image" content="https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "學生簽到",
+  "url": "https://xn--fiqx8ydrbqw9ayt3clqh.com/checkin.html",
+  "inLanguage": "zh-Hant",
+  "isPartOf": { "@type": "WebSite", "name": "香港奶龍中學", "url": "https://xn--fiqx8ydrbqw9ayt3clqh.com/" },
+  "description": "香港奶龍中學學生每日簽到頁。"
+}
+</script>
+
+<!-- Cloudflare Web Analytics（無 cookie，不需同意橫幅） -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5b4d5e258c2c41bcaa155d3bc7734e5f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
+<style>
+  :root{
+    --bg:#FCF8EC; --gold:#B8912A; --gold-deep:#8A6A12; --gold-lt:#D9B23F;
+    --ink:#2E2517; --ink-2:#6B5C3E; --ink-3:#8A7C60;
+    --line:rgba(184,145,42,.30);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(120% 55% at 50% -10%, #F6E7BE 0%, #FBF5E4 52%, #FCF8EC 100%) #FCF8EC;
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:30px 18px 56px;
+    min-height:100dvh;
+  }
+  .wrap{max-width:520px;margin:0 auto}
+
+  h1{
+    font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;
+    font-size:22px;font-weight:700;letter-spacing:.16em;text-indent:.16em;
+    color:var(--gold-deep);text-align:center;
+  }
+  .sub{margin-top:7px;text-align:center;font-size:11.5px;letter-spacing:.24em;color:var(--gold)}
+
+  /* ── 學生證 ── */
+  .card{
+    margin-top:24px;position:relative;
+    border-radius:18px;padding:22px 20px 20px;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.34)),
+      repeating-linear-gradient(0deg, rgba(120,95,25,.035) 0 1px, transparent 1px 3px);
+    border:1px solid var(--line);
+    box-shadow:0 18px 40px rgba(112,86,16,.13), inset 0 1px 0 rgba(255,255,255,.6);
+    overflow:hidden;
+  }
+  .card::before{ /* 頂部金條 */
+    content:"";position:absolute;left:0;right:0;top:0;height:4px;
+    background:linear-gradient(90deg,#D9B23F,#8A6A12,#D9B23F);
+  }
+  .card-head{display:flex;align-items:center;gap:14px}
+  .crest{width:58px;flex:0 0 58px;filter:drop-shadow(0 6px 12px rgba(112,86,16,.22))}
+  .card-head .t1{
+    font-family:"Noto Serif TC","Songti TC",serif;
+    font-size:17px;font-weight:700;letter-spacing:.10em;color:var(--gold-deep);
+  }
+  .card-head .t2{margin-top:5px;font-size:10.5px;letter-spacing:.18em;color:var(--gold)}
+  .card-head .no{margin-left:auto;text-align:right;font-size:10.5px;color:var(--ink-3);line-height:1.8}
+  .card-head .no b{display:block;font-size:12.5px;color:var(--ink-2);letter-spacing:.06em}
+
+  .fields{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+  .row{display:flex;align-items:baseline;gap:10px;font-size:13px;line-height:2.1}
+  .row .k{flex:0 0 54px;color:var(--ink-3);letter-spacing:.10em;font-size:12px}
+  .row .v{flex:1;color:var(--ink-2)}
+  .row .v.empty{color:#BCB39E}
+
+  .nickwrap{display:flex;gap:8px;flex:1}
+  .nickwrap input{
+    flex:1;min-width:0;font:inherit;font-size:13px;color:var(--ink);
+    background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:8px;
+    padding:7px 10px;outline:none;
+  }
+  .nickwrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,145,42,.14)}
+  .nickwrap button{
+    font:inherit;font-size:12.5px;font-weight:700;letter-spacing:.08em;cursor:pointer;
+    color:#FFF8E4;background:linear-gradient(180deg,#8E6D15,#7A5F10);
+    border:0;border-radius:8px;padding:7px 14px;
+  }
+  .nickwrap button:disabled{opacity:.4;cursor:default}
+
+  /* ── 數字 ── */
+  .stats{margin-top:20px;padding-top:18px;border-top:1px dashed var(--line);
+         display:flex;gap:12px;text-align:center}
+  .stat{flex:1}
+  .stat .n{
+    font-size:34px;font-weight:800;line-height:1.1;color:var(--gold-deep);
+    font-variant-numeric:tabular-nums;
+  }
+  .stat .n small{font-size:14px;font-weight:600;margin-left:3px;color:var(--gold)}
+  .stat .l{margin-top:5px;font-size:11px;letter-spacing:.16em;color:var(--ink-3)}
+
+  /* ── 簽到鈕 ── */
+  .btn{
+    display:block;width:100%;margin-top:22px;
+    font:inherit;font-size:16px;font-weight:800;letter-spacing:.22em;text-indent:.22em;
+    color:#FFF8E4;cursor:pointer;border:0;border-radius:13px;padding:17px 18px;
+    background:linear-gradient(180deg,#2E9E6C,#1D7B4F);
+    box-shadow:0 10px 24px rgba(40,160,106,.26), inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .14s ease, filter .14s ease;
+  }
+  .btn:hover{filter:brightness(1.07)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{
+    background:linear-gradient(180deg,#D8CFB8,#C8BEA4);
+    box-shadow:none;color:#8A7C60;cursor:default;transform:none;filter:none;
+  }
+  .hint{margin-top:11px;text-align:center;font-size:11.5px;line-height:1.8;color:var(--ink-3);min-height:20px}
+
+  /* 蓋章動畫 */
+  .stamp{
+    position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) scale(2.4) rotate(-14deg);
+    opacity:0;pointer-events:none;
+    font-family:"Noto Serif TC","Songti TC",serif;font-size:34px;font-weight:800;
+    letter-spacing:.14em;color:#C0392B;
+    border:3px solid #C0392B;border-radius:12px;padding:6px 16px;
+    text-shadow:0 0 0 rgba(0,0,0,0);
+  }
+  .stamp.on{animation:stampIn .62s cubic-bezier(.2,1.5,.4,1) forwards}
+  @keyframes stampIn{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(2.4) rotate(-14deg)}
+    60%{opacity:.92;transform:translate(-50%,-50%) scale(1) rotate(-9deg)}
+    100%{opacity:.85;transform:translate(-50%,-50%) scale(1) rotate(-9deg)}
+  }
+
+  /* ── 排行榜 ── */
+  .board{margin-top:34px}
+  .board h2{
+    font-size:13px;font-weight:700;letter-spacing:.22em;color:var(--gold-deep);
+    padding-left:11px;position:relative;margin-bottom:14px;
+  }
+  .board h2::before{
+    content:"";position:absolute;left:0;top:.3em;bottom:.3em;width:3px;border-radius:2px;
+    background:linear-gradient(180deg,#D9B23F,var(--gold));
+  }
+  .board table{width:100%;border-collapse:collapse;font-size:13px}
+  .board th{
+    text-align:left;font-weight:400;font-size:11px;letter-spacing:.14em;color:var(--ink-3);
+    padding:0 0 9px;border-bottom:1px solid var(--line);
+  }
+  .board th.r,.board td.r{text-align:right}
+  .board td{padding:11px 0;border-bottom:1px solid rgba(184,145,42,.13);color:var(--ink-2)}
+  .board tr.me td{background:rgba(217,178,63,.10);font-weight:700;color:var(--gold-deep)}
+  .board tr.me td:first-child{border-radius:8px 0 0 8px;padding-left:8px}
+  .board tr.me td:last-child{border-radius:0 8px 8px 0;padding-right:8px}
+  .rank{width:34px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .rank.top1,.rank.top2,.rank.top3{font-weight:800;color:var(--gold)}
+  .nm{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .st{width:74px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .st b{color:var(--gold-deep);font-size:15px}
+  .board .empty{padding:20px 0;text-align:center;font-size:13px;color:var(--ink-3)}
+  .board .off{padding:16px 0;text-align:center;font-size:11.5px;line-height:1.9;color:var(--ink-3)}
+
+  footer{
+    margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:11px;line-height:1.95;color:var(--ink-3);text-align:center;
+  }
+  footer a{color:var(--gold-deep)}
+  @media (prefers-reduced-motion:reduce){.stamp.on{animation:none;opacity:.85;transform:translate(-50%,-50%) rotate(-9deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>學生簽到</h1>
+  <div class="sub">香港奶龍中學 · 每日簽到</div>
+
+  <div class="card">
+    <div class="stamp" id="stamp">已簽到</div>
+
+    <div class="card-head">
+      <img class="crest" src="crest-672.webp" alt="香港奶龍中學校徽" decoding="async">
+      <div>
+        <div class="t1">香港奶龍中學</div>
+        <div class="t2">STUDENT ATTENDANCE</div>
+      </div>
+      <div class="no">
+        學號
+        <b id="sid">—</b>
+      </div>
+    </div>
+
+    <div class="fields">
+      <div class="row">
+        <span class="k">姓名</span>
+        <span class="v" id="nameCell">
+          <span class="nickwrap">
+            <input id="nick" type="text" maxlength="12" placeholder="輸入你的暱稱" autocomplete="off">
+            <button id="saveNick" type="button">確定</button>
+          </span>
+        </span>
+      </div>
+      <div class="row"><span class="k">班別</span><span class="v">中四甲</span></div>
+      <div class="row"><span class="k">狀態</span><span class="v" id="statusCell">未簽到</span></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n"><span id="streak">0</span><small>天</small></div><div class="l">連續簽到</div></div>
+      <div class="stat"><div class="n" id="total">0</div><div class="l">總簽到</div></div>
+      <div class="stat"><div class="n" id="best">0</div><div class="l">最長連續</div></div>
+    </div>
+  </div>
+
+  <button class="btn" id="checkin" type="button">今 日 簽 到</button>
+  <div class="hint" id="hint">每日簽到一次，斷簽會重新計算。</div>
+
+  <section class="board">
+    <h2>全校排行榜</h2>
+    <div id="boardBody">
+      <div class="empty">載入中…</div>
+    </div>
+  </section>
+
+  <footer>
+    本站純屬校友私人玩笑，並非任何學校之官方網站，與任何學校亦無關聯。<br>
+    排行榜資料公開可見，請勿填寫真實姓名或個人資料。<br>
+    <a href="./">回到主頁</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var LS_KEY = 'nlsc-attendance-v1';
+  var API_CHECKIN = '/api/checkin';
+  var API_BOARD = '/api/leaderboard';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var btn = $('checkin'), hint = $('hint'), stamp = $('stamp');
+  var nick = $('nick'), saveNick = $('saveNick'), nameCell = $('nameCell');
+  var statusCell = $('statusCell'), sidEl = $('sid');
+  var streakEl = $('streak'), totalEl = $('total'), bestEl = $('best');
+  var boardBody = $('boardBody');
+
+  /* ---------- 本地資料 ---------- */
+  var me = load();
+  save();   // 立刻落地一次：讓裝置 ID 在第一次互動前就固定下來
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    // 第一次來：產生一個裝置 ID（不是帳號，清了瀏覽器就沒了）
+    var uid = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    return { uid: uid, nickname: '', streak: 0, best: 0, total: 0, last: '' };
+  }
+  function save() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(me)); } catch (e) {}
+  }
+
+  /* ---------- 日期（用香港時區，避免跨時區簽到錯亂） ---------- */
+  function hkDate(offset) {
+    var d = new Date(Date.now() + (offset || 0) * 86400000);
+    // 轉成香港時間再取日期
+    var s = d.toLocaleDateString('en-CA', { timeZone: 'Asia/Hong_Kong' }); // YYYY-MM-DD
+    return s;
+  }
+  function today() { return hkDate(0); }
+  function yesterday() { return hkDate(-1); }
+  function isCheckedIn() { return me.last === today(); }
+
+  /* ---------- 顯示 ---------- */
+  function render() {
+    streakEl.textContent = me.streak;
+    totalEl.textContent = me.total;
+    bestEl.textContent = me.best;
+    sidEl.textContent = me.uid.slice(-6).toUpperCase();
+
+    if (me.nickname) {
+      nameCell.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = me.nickname;
+      nameCell.appendChild(t);
+    }
+
+    if (isCheckedIn()) {
+      btn.disabled = true;
+      btn.textContent = '今 日 已 簽 到';
+      statusCell.textContent = '已簽到 · ' + today();
+      hint.textContent = '明天再來，連續天數就會 +1。';
+      stamp.classList.add('on');
+    } else {
+      btn.disabled = false;
+      btn.textContent = '今 日 簽 到';
+      statusCell.textContent = '未簽到';
+      hint.textContent = me.last === yesterday()
+        ? '昨日已簽，今日簽到可累積連續天數。'
+        : '每日簽到一次，斷簽會重新計算。';
+    }
+  }
+
+  /* ---------- 簽到 ---------- */
+  function doCheckin() {
+    if (isCheckedIn()) return;
+    if (!me.nickname) {
+      hint.textContent = '請先填一個暱稱，這樣才會出現在排行榜上。';
+      nick.focus();
+      return;
+    }
+    var t = today();
+    me.streak = (me.last === yesterday()) ? me.streak + 1 : 1;
+    me.total += 1;
+    if (me.streak > me.best) me.best = me.streak;
+    me.last = t;
+    save();
+    render();
+    push();
+  }
+
+  /* ---------- 上報（失敗也不影響本地） ---------- */
+  function push() {
+    fetch(API_CHECKIN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        uid: me.uid, nickname: me.nickname,
+        streak: me.streak, total: me.total, best: me.best, last: me.last
+      })
+    }).then(function () { loadBoard(); }).catch(function () { /* 離線也能用 */ });
+  }
+
+  /* ---------- 排行榜 ---------- */
+  function loadBoard() {
+    fetch(API_BOARD, { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) { drawBoard(d.rows || []); })
+      .catch(function () {
+        boardBody.innerHTML = '<div class="off">排行榜暫時連不上。<br>你的簽到紀錄已經存在這部裝置上，不會不見。</div>';
+      });
+  }
+
+  function drawBoard(rows) {
+    if (!rows.length) {
+      boardBody.innerHTML = '<div class="empty">暫時未有人簽到，你可以係第一個。</div>';
+      return;
+    }
+    var h = '<table><thead><tr><th class="rank">#</th><th>暱稱</th><th class="r">連續</th></tr></thead><tbody>';
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var isMe = r.uid === me.uid;
+      var cls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+      h += '<tr' + (isMe ? ' class="me"' : '') + '>';
+      h += '<td class="rank ' + cls + '">' + (i + 1) + '</td>';
+      h += '<td class="nm">' + esc(r.nickname) + (isMe ? ' （你）' : '') + '</td>';
+      h += '<td class="r st"><b>' + num(r.streak) + '</b> 天</td>';
+      h += '</tr>';
+    }
+    h += '</tbody></table>';
+    boardBody.innerHTML = h;
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function num(n) {
+    n = parseInt(n, 10);
+    return isNaN(n) ? 0 : n;
+  }
+
+  /* ---------- 暱稱 ---------- */
+  saveNick.addEventListener('click', function () {
+    var v = (nick.value || '').trim().replace(/\s+/g, ' ').slice(0, 12);
+    if (!v) { hint.textContent = '暱稱不能空白。'; return; }
+    me.nickname = v;
+    save();
+    render();
+    if (isCheckedIn()) push();     // 已簽到但改了名 → 同步上去
+    hint.textContent = '好，叫「' + v + '」。';
+  });
+  nick.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); saveNick.click(); }
+  });
+
+  btn.addEventListener('click', doCheckin);
+
+  /* ---------- 啟動 ---------- */
+  if (me.nickname) { nick.value = me.nickname; }
+  render();
+  loadBoard();
+})();
+</script>
+</body>
+</html>

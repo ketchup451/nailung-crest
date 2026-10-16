@@ -2,14 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://xn--fiqx8ydrbqw9ayt3clqh.com/about.html</loc>
+    <loc>https://xn--fiqx8ydrbqw9ayt3clqh.com/checkin.html</loc>
     <lastmod>2026-10-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://xn--fiqx8ydrbqw9ayt3clqh.com/og.png</image:loc>
-      <image:title>香港奶龍中學校徽</image:title>
+      <image:title>香港奶龍中學學生簽到</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://xn--fiqx8ydrbqw9ayt3clqh.com/about.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xn--fiqx8ydrbqw9ayt3clqh.com/</loc>
