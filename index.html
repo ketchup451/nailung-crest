@@ -147,13 +147,54 @@
   .runner-slot img{display:block;width:40px;height:40px;animation:hop .38s ease-in-out infinite}
   @keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-3.5px)}}
 
+  /* ---- 攔路的小奶龍：倒數中途衝出來，把跑動那隻踢飛 ---- */
+  .blocker-slot{
+    position:absolute;bottom:2px;width:40px;margin-left:-20px;left:112%;
+    opacity:0;pointer-events:none;z-index:4;
+    transition:left .62s cubic-bezier(.35,0,.72,1), opacity .14s ease;
+  }
+  .blocker-slot img{display:block;width:40px;height:40px;transform:scaleX(-1);
+                    animation:hop .26s ease-in-out infinite}
+  .blocker-slot.on{opacity:1;left:var(--hit,52%)}
+  .blocker-slot.landed img{animation-duration:.5s}
+  .bbubble{
+    position:absolute;left:50%;bottom:48px;z-index:7;
+    transform:translate(-50%,6px) scale(.4);transform-origin:50% 100%;
+    background:#fff;color:#7A5F10;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+    padding:6px 12px;border-radius:13px;border:1.5px solid rgba(184,145,42,.5);
+    box-shadow:0 7px 18px rgba(112,86,16,.20);white-space:nowrap;
+    opacity:0;pointer-events:none;
+    transition:opacity .16s ease, transform .26s cubic-bezier(.34,1.56,.64,1);
+  }
+  .bbubble.on{opacity:1;transform:translate(-50%,0) scale(1)}
+  .bbubble::after{
+    content:"";position:absolute;left:50%;bottom:-6.5px;margin-left:-5px;width:10px;height:10px;
+    background:#fff;border-right:1.5px solid rgba(184,145,42,.5);
+    border-bottom:1.5px solid rgba(184,145,42,.5);
+    transform:rotate(45deg);border-bottom-right-radius:2px;
+  }
+
+  /* ---- 被踢飛的跑者 ---- */
+  .runner-slot.kicked img{animation:none}
+  .runner-slot.kicked{animation:knockoff .92s cubic-bezier(.22,-.25,.6,1) forwards;z-index:8}
+  @keyframes knockoff{
+    0%  {transform:translate(0,0) rotate(0)}
+    18% {transform:translate(11px,-30px) rotate(34deg)}
+    100%{transform:translate(300px,-120px) rotate(400deg);opacity:0}
+  }
+
   .status{margin-top:16px;font-size:13px;letter-spacing:.05em;color:var(--ink-2)}
   .status b{color:var(--gold-deep);font-variant-numeric:tabular-nums;font-size:15px;font-weight:700}
 
-  .acts{
-    margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;
-    align-items:center;justify-content:center;
+  .acts{margin-top:20px}
+  /* 全頁只剩一顆主按鈕：做大、佔滿寬度 */
+  .acts #skip{
+    display:block;width:100%;
+    font-size:16.5px;letter-spacing:.18em;text-indent:.18em;
+    padding:19px 26px;border-radius:15px;
+    box-shadow:0 12px 28px rgba(112,86,16,.30), inset 0 1px 0 rgba(255,255,255,.20);
   }
+  .acts #skip:hover{box-shadow:0 16px 34px rgba(112,86,16,.36), inset 0 1px 0 rgba(255,255,255,.24)}
   button{
     font:inherit;font-size:13.5px;font-weight:700;
     letter-spacing:.10em;text-indent:.10em;color:#FFF8E4;
@@ -256,11 +297,14 @@
     <div class="track">
       <div class="bar"><i id="bar"></i></div>
       <div class="runner-slot" id="slot"><img src="run.png" alt="" aria-hidden="true"></div>
+      <div class="blocker-slot" id="blocker" aria-hidden="true">
+        <img src="run.png" alt="">
+        <span class="bbubble" id="bbubble">別走了</span>
+      </div>
     </div>
     <p class="status"><span id="smsg">正在前往本校正式網站</span><span id="stime"> · <b id="sec">4</b> 秒</span></p>
     <div class="acts">
       <button id="skip" type="button">唔等喇，而家就去 →</button>
-      <button id="stay" type="button" class="ghost">先唔走，留低睇多陣</button>
     </div>
     <p class="dest" id="dest"></p>
   </div>
@@ -284,8 +328,10 @@
   'use strict';
 
   var TARGET = 'https://www.nlsipess.edu.hk/';
-  var TOTAL  = 4000;      // 自動跳轉
-  var STAMP  = 3450;      // 蓋章時機
+  var TOTAL  = 4000;      // 倒數結束（現已改為停住，不再自動跳轉）
+  var STAMP  = 3450;      // 蓋章時機（被攔截時會取消）
+  var KICK   = 2480;      // 攔路小奶龍出場
+  var HIT    = 3120;      // 撞上、跑者被踢飛
 
   var reduced = window.matchMedia &&
                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -299,9 +345,10 @@
   var bar = $('bar'), sec = $('sec'), slot = $('slot'), status = document.querySelector('.status');
   var crest = $('crest'), tilt = $('crestTilt'), pupil = $('pupil'), bubble = $('bubble');
   var stamp = $('stamp'), fall = $('fall'), track = document.querySelector('.track');
-  var smsg = $('smsg'), stime = $('stime'), skipBtn = $('skip'), stayBtn = $('stay');
+  var smsg = $('smsg'), stime = $('stime'), skipBtn = $('skip');
   var runner = slot.querySelector('img');
   var stampImg = $('stampImg');
+  var blocker = $('blocker'), bbubble = $('bbubble');
   var preview = hold;      // 預覽模式：只示範、不真的跳轉
 
   // 蓋章用的圖不在首屏，延後才載入（它本來會跟校徽搶頻寬、拖慢第一次渲染）
@@ -320,6 +367,7 @@
 
   /* ---------------- 進度條 + 小奶龍 ---------------- */
   var startedAt = Date.now(), done = false, tStamp = null, tGo = null, ui = null;
+  var tKick = null, tHit = null, kicked = false;
 
   function place(p) {                       // p: 0..1
     p = Math.max(0, Math.min(1, p));
@@ -330,8 +378,35 @@
   function stop() {
     if (tStamp) { clearTimeout(tStamp); tStamp = null; }
     if (tGo) { clearTimeout(tGo); tGo = null; }
+    if (tKick) { clearTimeout(tKick); tKick = null; }
+    if (tHit) { clearTimeout(tHit); tHit = null; }
     if (ui) { clearInterval(ui); ui = null; }
   }
+  /* ---------------- 攔路：另一隻小奶龍衝出來，把跑動那隻踢飛 ---------------- */
+  function resetBlock() {
+    kicked = false;
+    if (!slot || !blocker) return;
+    blocker.classList.remove('on', 'landed');
+    if (bbubble) bbubble.classList.remove('on');
+    slot.classList.remove('kicked');
+  }
+  function startBlock() {
+    if (done || staying || kicked || !blocker) return;
+    var tw = track.clientWidth, R = 20;
+    blocker.style.setProperty('--hit', Math.round(R + 0.60 * (tw - 2 * R)) + 'px');
+    blocker.classList.add('on');
+  }
+  function kick() {
+    if (done || staying || kicked || !slot || !blocker) return;
+    kicked = true;
+    blocker.classList.add('landed');
+    slot.classList.add('kicked');
+    if (bbubble) bbubble.classList.add('on');
+    if (runner) runner.style.animationPlayState = '';
+    if (tStamp) { clearTimeout(tStamp); tStamp = null; }
+    if (ui) { clearInterval(ui); ui = null; }
+  }
+
   function go() {
     if (done) return;
     done = true; stop();
@@ -376,7 +451,6 @@
     stamp.classList.remove('on');
     runPaused(true);
     skipBtn.textContent = '好啦，去官網 →';
-    stayBtn.textContent = '再倒數一次';
     if (preview) {
       smsg.textContent = '預覽模式：已停用自動跳轉';
       stime.hidden = true;
@@ -391,10 +465,10 @@
     if (done || !staying) return;
     staying = false;
     stop();
+    resetBlock();
     stamp.classList.remove('on');
     runPaused(false);
     skipBtn.textContent = '唔等喇，而家就去 →';
-    stayBtn.textContent = '先唔走，留低睇多陣';
     if (preview) {
       smsg.textContent = '預覽模式：已停用自動跳轉（小奶龍示範跑動中）';
       stime.hidden = true;
@@ -409,14 +483,13 @@
     // 倒數走完不再自動跳走 —— 改為「停住」，由訪客自己決定去唔去。
     // 這是主頁能被搜尋引擎收錄的前提：頁面不可以自己導航走。
     tGo = setTimeout(cancelGo, TOTAL);
+    tKick = setTimeout(startBlock, KICK);
+    tHit  = setTimeout(kick, HIT);
     ui = setInterval(paint, 50);
     paint();
   }
 
   skipBtn.addEventListener('click', go);            // 主按鈕永遠是「去」
-  stayBtn.addEventListener('click', function () {    // 副按鈕切換：停 / 再倒數
-    if (staying) restartGo(); else cancelGo();
-  });
 
   /* ---------------- A 眼睛全頁跟隨滑鼠 + 校徽微轉 ---------------- */
   var outer = document.querySelector('.crest-outer');
@@ -524,6 +597,8 @@
   armStampSoon();
   tStamp = setTimeout(function () { armStamp(); stamp.classList.add('on'); }, STAMP);
   tGo = setTimeout(cancelGo, TOTAL);
+  tKick = setTimeout(startBlock, KICK);
+  tHit  = setTimeout(kick, HIT);
   ui = setInterval(paint, 50);
   paint();
 })();
