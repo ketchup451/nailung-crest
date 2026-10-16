@@ -36,9 +36,9 @@
   .counter{
     margin-top:22px;font-size:15px;letter-spacing:.10em;color:var(--gold);
   }
-  .counter b{
-    color:var(--gold-deep);font-size:26px;font-weight:700;
-    font-variant-numeric:tabular-nums;padding:0 4px;
+  /* 數字由 hits.sh 產生（第三方圖片，無法改樣式，所以當成一枚金色籌碼內嵌） */
+  .counter img{
+    height:26px;width:auto;margin:0 5px;vertical-align:-7px;
   }
   .burn{
     margin-top:26px;font-size:clamp(16px,4.4vw,20px);line-height:1.85;
@@ -59,7 +59,8 @@
 <main>
   <h1>你被騙了</h1>
 
-  <p class="counter" id="counterLine" hidden>你是第 <b id="visitNo">—</b> 個被騙的</p>
+  <p class="counter" id="counterLine">你是第 <img id="hits" alt="人次"
+    src="https://hits.sh/xn--fiqx8ydrbqw9ayt3clqh.com.svg?label=%20&color=B8912A&labelColor=B8912A"> 個被騙的</p>
 
   <p class="burn">你不會以為我傻到把聯絡資訊放在這裡吧</p>
 
@@ -74,29 +75,16 @@
 (function () {
   'use strict';
 
-  // 奶龍大笑 GIF 未放上之前，整塊隱藏，免得見到爛圖示
+  // 奶龍大笑圖：載不到（例如尚未放上）就整塊收起，免得見到爛圖示
   var laugh = document.getElementById('laugh');
   laugh.addEventListener('error', function () { laugh.parentNode.hidden = true; });
   if (laugh.complete && laugh.naturalWidth === 0) laugh.parentNode.hidden = true;
 
-  // 「你是第 N 個」需要一個可以寫入的後端。
-  // 把後端位址填進 COUNTER_ENDPOINT，這一整行才會出現；
-  // 未接之前不會顯示，也不會露出爛樣。
-  var COUNTER_ENDPOINT = '';
+  // 人次數字來自 hits.sh（第三方），載不到就把整行收起，不露出半截句子
   var line = document.getElementById('counterLine');
-  var slot = document.getElementById('visitNo');
-
-  if (!COUNTER_ENDPOINT) return;
-
-  fetch(COUNTER_ENDPOINT, { method: 'POST' })
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      if (d && typeof d.n === 'number') {
-        slot.textContent = d.n.toLocaleString('zh-Hant');
-        line.hidden = false;
-      }
-    })
-    .catch(function () { /* 拿不到數字就不顯示，不讓頁面看起來壞掉 */ });
+  var hits = document.getElementById('hits');
+  hits.addEventListener('error', function () { line.hidden = true; });
+  if (hits.complete && hits.naturalWidth === 0) line.hidden = true;
 })();
 </script>
 </body>
