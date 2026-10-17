@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>香港奶龍中學 — 校友開的玩笑網站</title>
-<meta name="description" content="香港奶龍中學（簡體：香港奶龙中学）：校友私下開的玩笑網站，校名、校徽、校訓全是編的，與任何學校無關。四秒後會把你送回真正的學校官網。猜到作者是誰，歡迎 IG 私訊領小禮物。">
+<meta name="description" content="香港奶龍中學（簡體：香港奶龙中学、奶龙学校、香港奶龙）：校友私下開的玩笑網站，校名、校徽、校訓全是編的，與任何學校無關。猜到作者是誰，歡迎 IG 私訊領小禮物。">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <meta name="theme-color" content="#FCF8EC">
 <meta name="author" content="香港奶龍中學校友">
@@ -39,7 +39,12 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "香港奶龍中學",
-  "alternateName": ["香港奶龙中学", "Hong Kong Nai Lung Secondary School"],
+  "alternateName": [
+    "香港奶龙中学", "奶龙中学", "奶龍中學",
+    "奶龙学校", "奶龍學校",
+    "香港奶龙", "香港奶龍",
+    "Hong Kong Nai Lung Secondary School", "NLS"
+  ],
   "url": "https://xn--fiqx8ydrbqw9ayt3clqh.com/",
   "inLanguage": "zh-Hant",
   "description": "校友私下開的玩笑網站，並非任何學校的官方網站，與任何學校無關。",
@@ -129,6 +134,14 @@
     letter-spacing:.20em;text-indent:.20em;
     color:var(--gold-deep);
   }
+  /* 校名上方的小標，像真學校網站的首頁大標 */
+  .welcome{
+    margin:28px 0 0;text-align:center;
+    font-size:12px;letter-spacing:.34em;text-indent:.34em;
+    color:var(--gold);
+  }
+  .welcome + h1{margin-top:8px}
+
   .rule{display:flex;align-items:center;justify-content:center;gap:10px;
         margin:24px auto 0;width:100%;max-width:360px}
   .rule::before,.rule::after{content:"";flex:1;height:1px;
@@ -275,10 +288,28 @@
 
   .dest{margin-top:15px;font-size:11.5px;color:var(--ink-3);word-break:break-all}
 
-  footer{margin-top:36px;padding-top:17px;border-top:1px solid rgba(184,145,42,.20);
+  /* 本站說明：真正給搜尋引擎讀的正文，視覺上刻意安靜 */
+  .note{
+    margin-top:34px;padding-top:20px;
+    border-top:1px solid rgba(184,145,42,.20);
+    font-size:12.5px;line-height:2.05;color:var(--ink-2);
+    text-align:left;
+  }
+  .note h2{
+    font-size:11.5px;font-weight:700;letter-spacing:.24em;
+    color:var(--gold);margin-bottom:10px;
+  }
+  .note p + p{margin-top:11px}
+
+  footer{margin-top:30px;padding-top:17px;border-top:1px solid rgba(184,145,42,.20);
          font-size:11px;line-height:1.9;color:var(--ink-3);letter-spacing:.02em}
   footer a{color:var(--gold-deep);text-underline-offset:3px}
   footer a:hover{color:var(--gold)}
+  /* 最底那句：刻意做得很小很暗，只有真係望到底嘅人先會見到 */
+  footer .creed{
+    margin-top:14px;font-size:10px;line-height:1.8;
+    letter-spacing:.08em;opacity:.45;
+  }
 
   /* ---------------- D 落下的粒子 ---------------- */
   #fall{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5;
@@ -342,6 +373,7 @@
     </div>
   </div>
 
+  <p class="welcome">歡迎來到</p>
   <h1>香港奶龍中學</h1>
   <div class="rule"><i></i></div>
 
@@ -361,10 +393,19 @@
     <p class="dest" id="dest"></p>
   </div>
 
+  <section class="note">
+    <h2>本站說明</h2>
+    <p>「香港奶龍中學」是校友私下做的一個玩笑網站。校名、校徽、校訓、校歌全部是編的，
+       與任何真實學校、辦學團體無關，亦非任何學校的官方網站。</p>
+    <p>如果你在搜「奶龙中学」、「奶龙学校」或者「香港奶龙」而找到這裡 ——
+       簡體寫法是「香港奶龙中学」，這就是那個站。真正的學校官網在上面那顆按鈕裡。</p>
+  </section>
+
   <footer>
     本站純屬校友私人玩笑，並非任何學校之官方網站，與任何學校亦無關聯。<br>
     猜到作者是誰嗎？IG 私訊我 —— 猜中者，有小禮物一份。<br>
     <a href="/about">關於本站 →</a>
+    <p class="creed">奶龍神聖不可侵犯　請在學校保護好我們奶龍的聲譽！</p>
   </footer>
 </div>
 
