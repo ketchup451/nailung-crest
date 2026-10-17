@@ -71,9 +71,11 @@
     background:radial-gradient(120% 62% at 50% -8%, #F6E7BE 0%, #FBF5E4 52%, #FCF8EC 100%) #FCF8EC;
     color:var(--ink);
     font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",sans-serif;
-    display:flex;align-items:center;justify-content:center;
+    /* ★ 用 align-items:flex-start + .wrap 的 auto 邊距：
+       有空間就垂直居中，內容高過視窗就由頂部開始排（唔會被頂出畫面）。 */
+    display:flex;align-items:flex-start;justify-content:center;
     padding:40px 22px 46px;
-    min-height:100%;
+    min-height:100dvh;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
   }
@@ -84,7 +86,7 @@
       repeating-linear-gradient(0deg, rgba(120,95,25,.045) 0 1px, transparent 1px 3px);
   }
 
-  .wrap{width:100%;max-width:520px;position:relative;z-index:1;text-align:center}
+  .wrap{width:100%;max-width:520px;position:relative;z-index:1;text-align:center;margin-block:auto}
 
   /* ---------------- 校徽 ---------------- */
   .crest-outer{width:var(--crest-w);margin:0 auto;perspective:760px}
